@@ -1,336 +1,229 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jan 29 11:14:01 2026
+Created on Thu Jan 29 11:24:24 2026
 
 @author: 22001691
 """
 
 import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox
+from tkinter import ttk, scrolledtext, messagebox
 import random
 
-# Dictionary of topics with explanations and quizzes
-# Based on South African Physical Sciences curriculum for Grade 10-12
+# Topic data (expanded slightly, feel free to add more)
 topics = {
     "Motion in One Dimension": {
         "grade": 10,
-        "category": "Mechanics",
-        "explanation": """
-Motion in one dimension refers to movement along a straight line.
-Key concepts:
-- Position: Location relative to a reference point.
-- Displacement: Change in position (vector quantity).
-- Distance: Total path length (scalar).
-- Average velocity: Displacement over time.
-- Average speed: Distance over time.
-- Acceleration: Change in velocity over time.
-Equations:
-- v = Δx / Δt
-- a = Δv / Δt
-- Use graphs: position-time, velocity-time, acceleration-time.
+        "explanation": """Motion in one dimension means movement along a straight line.
+
+Key quantities:
+• Position (x) — where the object is
+• Displacement (Δx) — change in position (vector)
+• Distance — total path travelled (scalar)
+• Speed — distance/time (scalar)
+• Velocity — displacement/time (vector)
+• Acceleration — change in velocity/time (vector)
+
+Important equations:
+v = u + at
+Δx = ut + ½at²
+v² = u² + 2aΔx
+(Where u = initial velocity, v = final velocity)
+
+Graphs:
+• Position-time → slope = velocity
+• Velocity-time → slope = acceleration, area = displacement
 """,
         "quiz": [
-            {
-                "question": "What is the difference between distance and displacement?",
-                "options": [
-                    "Distance is a vector, displacement is scalar.",
-                    "Distance is scalar, displacement is vector.",
-                    "Both are vectors.",
-                    "Both are scalars."
-                ],
-                "answer": 1
-            },
-            {
-                "question": "If an object moves from position 0 to 10 m, then back to 5 m, what is the displacement?",
-                "options": ["15 m", "10 m", "5 m", "20 m"],
-                "answer": 2
-            }
+            {"q": "Displacement is a __________ quantity.", 
+             "options": ["scalar", "vector", "both", "neither"], "ans": 1},
+            {"q": "If a car travels 100 km east then 40 km west, what is the displacement?", 
+             "options": ["140 km", "60 km east", "60 km west", "100 km east"], "ans": 1},
         ]
     },
-    "Conservation of Energy": {
-        "grade": 10,
-        "category": "Mechanics",
-        "explanation": """
-Conservation of mechanical energy: In the absence of dissipative forces, total mechanical energy (kinetic + potential) is constant.
-- Kinetic energy: KE = (1/2)mv²
-- Gravitational potential energy: PE = mgh
-- ME = KE + PE = constant
-Applies to free fall, pendulums, etc.
-""",
-        "quiz": [
-            {
-                "question": "What is kinetic energy?",
-                "options": [
-                    "Energy due to position.",
-                    "Energy due to motion.",
-                    "Stored energy.",
-                    "Thermal energy."
-                ],
-                "answer": 1
-            },
-            {
-                "question": "In conservation of energy, what happens if friction is present?",
-                "options": [
-                    "Energy is conserved.",
-                    "Energy is not conserved; some is lost as heat.",
-                    "Energy increases.",
-                    "No effect."
-                ],
-                "answer": 1
-            }
-        ]
-    },
-    "Transverse Waves": {
-        "grade": 10,
-        "category": "Waves, Sound & Light",
-        "explanation": """
-Transverse waves: Disturbance perpendicular to direction of propagation.
-- Examples: Waves on a string, light.
-- Terms: Amplitude (max displacement), wavelength (distance between crests), frequency (waves per second), period (time for one wave), speed (v = fλ).
-Superposition: Waves add up.
-""",
-        "quiz": [
-            {
-                "question": "What is the relationship between speed, frequency, and wavelength?",
-                "options": ["v = f / λ", "v = f λ", "v = λ / f", "v = f + λ"],
-                "answer": 1
-            },
-            {
-                "question": "In a transverse wave, the disturbance is:",
-                "options": [
-                    "Parallel to propagation.",
-                    "Perpendicular to propagation.",
-                    "Circular.",
-                    "None."
-                ],
-                "answer": 1
-            }
-        ]
-    },
-    "Electrostatics": {
-        "grade": 10,
-        "category": "Electricity & Magnetism",
-        "explanation": """
-Electrostatics: Study of stationary charges.
-- Two kinds of charge: Positive and negative.
-- Like charges repel, unlike attract.
-- Coulomb's law (Grade 11): F = k q1 q2 / r²
-- Charge conservation and quantization.
-""",
-        "quiz": [
-            {
-                "question": "What happens when two positive charges are brought near?",
-                "options": ["Attract", "Repel", "Nothing", "Merge"],
-                "answer": 1
-            },
-            {
-                "question": "Charge is measured in:",
-                "options": ["Volts", "Amperes", "Coulombs", "Ohms"],
-                "answer": 2
-            }
-        ]
-    },
-    "Atomic Structure": {
-        "grade": 10,
-        "category": "Matter & Materials",
-        "explanation": """
-Atomic structure:
-- Atom: Protons (positive, nucleus), neutrons (neutral, nucleus), electrons (negative, orbits).
-- Atomic number: Number of protons.
-- Mass number: Protons + neutrons.
-- Isotopes: Same protons, different neutrons.
-- Electron configuration: e.g., 2.8.1 for sodium.
-""",
-        "quiz": [
-            {
-                "question": "Where are protons located?",
-                "options": ["Orbit", "Nucleus", "Shell", "Outside"],
-                "answer": 1
-            },
-            {
-                "question": "What defines the element?",
-                "options": ["Mass number", "Atomic number", "Neutrons", "Electrons"],
-                "answer": 1
-            }
-        ]
-    },
-    "Chemical Bonding": {
-        "grade": 10,
-        "category": "Matter & Materials",
-        "explanation": """
-Chemical bonding:
-- Covalent: Sharing electrons (e.g., H2).
-- Ionic: Transfer electrons (e.g., NaCl).
-- Metallic: Delocalized electrons in metals.
-Bonds form to achieve stable electron configurations.
-""",
-        "quiz": [
-            {
-                "question": "In ionic bonding, electrons are:",
-                "options": ["Shared", "Transferred", "Lost", "Gained equally"],
-                "answer": 1
-            },
-            {
-                "question": "Water (H2O) has what type of bond?",
-                "options": ["Ionic", "Covalent", "Metallic", "Hydrogen"],
-                "answer": 1
-            }
-        ]
-    },
-    "Reactions in Aqueous Solution": {
-        "grade": 10,
-        "category": "Chemical Change",
-        "explanation": """
-Reactions in water:
-- Ions in solution (electrolytes).
-- Conductivity: Due to mobile ions.
-- Precipitation: Insoluble product forms.
-- Types: Acid-base, redox, precipitation.
-""",
-        "quiz": [
-            {
-                "question": "What is an electrolyte?",
-                "options": [
-                    "Non-conductor",
-                    "Solution that conducts electricity",
-                    "Insulator",
-                    "Pure water"
-                ],
-                "answer": 1
-            },
-            {
-                "question": "Precipitation reaction produces:",
-                "options": ["Gas", "Solid", "Liquid", "Plasma"],
-                "answer": 1
-            }
-        ]
-    },
-    # Add more topics from Grade 11 and 12 as needed
-    "Newton's Laws": {
+    "Newton's Laws of Motion": {
         "grade": 11,
-        "category": "Mechanics",
-        "explanation": """
-Newton's Laws:
-1. Inertia: Object at rest stays, moving continues unless acted upon.
-2. F = ma
-3. Action-reaction pairs.
-Applications: Free body diagrams, friction, gravity.
+        "explanation": """Newton's Three Laws:
+
+1. First Law (Inertia): An object continues in its state of rest or uniform motion unless acted upon by a net external force.
+
+2. Second Law: F_net = m × a  
+   (The net force equals mass times acceleration)
+
+3. Third Law: For every action there is an equal and opposite reaction.
+
+Tips:
+• Always draw free-body diagrams
+• Weight = mg (downward)
+• Normal force, friction, tension, applied force, etc.
 """,
         "quiz": [
-            {
-                "question": "Newton's first law is also known as:",
-                "options": ["Acceleration", "Inertia", "Action-reaction", "Gravity"],
-                "answer": 1
-            }
+            {"q": "Newton's First Law is also called the law of", 
+             "options": ["acceleration", "inertia", "action-reaction", "gravity"], "ans": 1},
+            {"q": "If F_net = 0, then acceleration is", 
+             "options": ["increasing", "zero", "negative", "infinite"], "ans": 1},
         ]
     },
-    # ... You can expand this dictionary with more topics
+    "Work, Energy & Power": {
+        "grade": 10,
+        "explanation": """Work (W) = F × Δx × cosθ   (Joules)
+
+Energy:
+• Kinetic energy: KE = ½mv²
+• Gravitational potential energy: PE = mgh
+
+Conservation of mechanical energy (no friction/air resistance):
+KE_initial + PE_initial = KE_final + PE_final
+
+Power = Work / time   (Watts = J/s)
+""",
+        "quiz": [
+            {"q": "The unit of energy is", 
+             "options": ["Newton", "Joule", "Watt", "Pascal"], "ans": 1},
+            {"q": "When a ball falls freely, its potential energy is converted to", 
+             "options": ["kinetic energy", "heat", "sound", "light"], "ans": 0},
+        ]
+    },
+    # ← You can keep adding more topics here
 }
 
-class PhysSciApp:
+class PhysSciHelper:
     def __init__(self, root):
         self.root = root
-        self.root.title("Physical Sciences Helper")
-        self.root.geometry("800x600")
+        self.root.title("Physical Sciences Helper - Limpopo Edition")
+        self.root.geometry("780x580")
+        self.root.resizable(True, True)
 
-        # Welcome label
-        welcome = tk.Label(root, text="Welcome to Physical Sciences Helper!\nSelect a topic to learn or take a quiz.", font=("Arial", 14))
-        welcome.pack(pady=20)
+        tk.Label(root, text="Physical Sciences Study App", font=("Segoe UI", 16, "bold")).pack(pady=12)
 
-        # Filter by grade
+        frame = tk.Frame(root)
+        frame.pack(pady=8)
+
+        tk.Label(frame, text="Select Grade:", font=("Segoe UI", 11)).pack(side=tk.LEFT, padx=8)
         self.grade_var = tk.StringVar(value="All")
-        grade_label = tk.Label(root, text="Filter by Grade:")
-        grade_label.pack()
-        grade_options = ttk.Combobox(root, textvariable=self.grade_var, values=["All", 10, 11, 12])
-        grade_options.pack()
-        grade_options.bind("<<ComboboxSelected>>", self.update_topic_list)
+        grade_combo = ttk.Combobox(frame, textvariable=self.grade_var, 
+                                  values=["All", "10", "11", "12"], width=8, state="readonly")
+        grade_combo.pack(side=tk.LEFT)
+        grade_combo.bind("<<ComboboxSelected>>", self.refresh_topics)
 
-        # Listbox for topics
-        self.topic_listbox = tk.Listbox(root, height=15, width=50, font=("Arial", 12))
-        self.topic_listbox.pack(pady=10)
-        self.update_topic_list()
+        self.topic_list = tk.Listbox(root, height=14, width=45, font=("Segoe UI", 11), selectmode=tk.SINGLE)
+        self.topic_list.pack(pady=12, padx=20, fill=tk.BOTH, expand=False)
+        self.topic_list.bind("<<ListboxSelect>>", self.on_select)
 
-        # Buttons
-        learn_btn = tk.Button(root, text="Learn Topic", command=self.learn_topic)
-        learn_btn.pack(side=tk.LEFT, padx=20)
-        quiz_btn = tk.Button(root, text="Take Quiz", command=self.take_quiz)
-        quiz_btn.pack(side=tk.LEFT, padx=20)
-        exit_btn = tk.Button(root, text="Exit", command=root.quit)
-        exit_btn.pack(side=tk.LEFT, padx=20)
+        btn_frame = tk.Frame(root)
+        btn_frame.pack(pady=10)
 
-    def update_topic_list(self, event=None):
-        selected_grade = self.grade_var.get()
-        self.topic_listbox.delete(0, tk.END)
-        for topic in sorted(topics.keys()):
-            if selected_grade == "All" or topics[topic]["grade"] == int(selected_grade):
-                self.topic_listbox.insert(tk.END, topic)
+        tk.Button(btn_frame, text=" Read Explanation ", command=self.show_explanation,
+                  width=18, font=("Segoe UI", 10)).pack(side=tk.LEFT, padx=12)
+        tk.Button(btn_frame, text=" Start Quiz ", command=self.start_quiz,
+                  width=18, font=("Segoe UI", 10)).pack(side=tk.LEFT, padx=12)
+        tk.Button(btn_frame, text=" Exit ", command=root.destroy,
+                  width=10, font=("Segoe UI", 10)).pack(side=tk.LEFT, padx=12)
 
-    def learn_topic(self):
-        selected = self.topic_listbox.curselection()
-        if not selected:
-            messagebox.showwarning("Selection", "Please select a topic.")
-            return
-        topic = self.topic_listbox.get(selected[0])
-        explanation = topics[topic]["explanation"]
+        self.refresh_topics()
 
-        # New window for explanation
-        learn_win = tk.Toplevel(self.root)
-        learn_win.title(topic)
-        learn_text = tk.Text(learn_win, wrap=tk.WORD, width=70, height=20, font=("Arial", 12))
-        learn_text.insert(tk.END, explanation)
-        learn_text.pack(pady=10, padx=10)
-        learn_text.config(state=tk.DISABLED)  # Read-only
+    def refresh_topics(self, event=None):
+        grade = self.grade_var.get()
+        self.topic_list.delete(0, tk.END)
+        for topic, data in sorted(topics.items()):
+            if grade == "All" or str(data["grade"]) == grade:
+                self.topic_list.insert(tk.END, f"{topic}  (Gr {data['grade']})")
 
-    def take_quiz(self):
-        selected = self.topic_listbox.curselection()
-        if not selected:
-            messagebox.showwarning("Selection", "Please select a topic.")
-            return
-        topic = self.topic_listbox.get(selected[0])
-        quiz_questions = topics[topic]["quiz"]
-        if not quiz_questions:
-            messagebox.showinfo("Quiz", "No quiz available for this topic.")
+    def get_selected_topic(self):
+        selection = self.topic_list.curselection()
+        if not selection:
+            return None
+        item = self.topic_list.get(selection[0])
+        # Remove the (Gr xx) part
+        return item.split("  (Gr")[0].strip()
+
+    def show_explanation(self):
+        topic = self.get_selected_topic()
+        if not topic:
+            messagebox.showinfo("No selection", "Please select a topic first.")
             return
 
-        # Shuffle questions
-        random.shuffle(quiz_questions)
+        win = tk.Toplevel(self.root)
+        win.title(topic)
+        win.geometry("680x520")
 
-        # Quiz window
+        tk.Label(win, text=topic, font=("Segoe UI", 14, "bold")).pack(pady=10)
+
+        text = scrolledtext.ScrolledText(win, wrap=tk.WORD, font=("Segoe UI", 11), padx=10, pady=10)
+        text.insert(tk.END, topics[topic]["explanation"].strip())
+        text.config(state="disabled")
+        text.pack(fill=tk.BOTH, expand=True, padx=12, pady=8)
+
+        tk.Button(win, text="Close", command=win.destroy, width=10).pack(pady=10)
+
+    def start_quiz(self):
+        topic = self.get_selected_topic()
+        if not topic:
+            messagebox.showinfo("No selection", "Please select a topic first.")
+            return
+
+        questions = topics[topic].get("quiz", [])
+        if not questions:
+            messagebox.showinfo("No quiz", "No quiz questions available for this topic yet.")
+            return
+
+        random.shuffle(questions)
+
         quiz_win = tk.Toplevel(self.root)
         quiz_win.title(f"Quiz: {topic}")
-        score = [0]  # Mutable for inner function
+        quiz_win.geometry("680x480")
 
-        def next_question(index=0):
-            if index >= len(quiz_questions):
-                messagebox.showinfo("Quiz Complete", f"Your score: {score[0]} / {len(quiz_questions)}")
-                quiz_win.destroy()
-                return
+        score = [0]
+        current_q = [0]
 
-            q = quiz_questions[index]
+        def show_question():
             for widget in quiz_win.winfo_children():
                 widget.destroy()
 
-            q_label = tk.Label(quiz_win, text=q["question"], font=("Arial", 12))
-            q_label.pack(pady=10)
+            if current_q[0] >= len(questions):
+                tk.Label(quiz_win, text=f"Quiz complete!\nScore: {score[0]} / {len(questions)}",
+                         font=("Segoe UI", 13, "bold")).pack(pady=40)
+                tk.Button(quiz_win, text="Close", command=quiz_win.destroy, width=12).pack(pady=20)
+                return
 
-            var = tk.IntVar()
+            q = questions[current_q[0]]
+
+            tk.Label(quiz_win, text=f"Question {current_q[0]+1}/{len(questions)}", font=("Segoe UI", 11)).pack(pady=6)
+            tk.Label(quiz_win, text=q["q"], font=("Segoe UI", 12), wraplength=620, justify="left").pack(pady=12)
+
+            var = tk.IntVar(value=-1)
             for i, opt in enumerate(q["options"]):
-                rb = tk.Radiobutton(quiz_win, text=opt, variable=var, value=i, font=("Arial", 10))
-                rb.pack(anchor=tk.W)
+                tk.Radiobutton(quiz_win, text=opt, variable=var, value=i, font=("Segoe UI", 11),
+                               anchor="w", justify="left").pack(fill=tk.X, padx=40)
 
-            def submit():
-                selected_ans = var.get()
-                if selected_ans == q["answer"]:
+            def check_answer():
+                ans = var.get()
+                if ans == -1:
+                    messagebox.showwarning("No choice", "Please select an option.")
+                    return
+
+                correct = q["ans"]
+                if ans == correct:
                     score[0] += 1
-                next_question(index + 1)
+                    feedback = "Correct!"
+                    color = "green"
+                else:
+                    feedback = f"Wrong. Correct answer: {q['options'][correct]}"
+                    color = "red"
 
-            submit_btn = tk.Button(quiz_win, text="Submit", command=submit)
-            submit_btn.pack(pady=10)
+                tk.Label(quiz_win, text=feedback, fg=color, font=("Segoe UI", 11, "bold")).pack(pady=12)
 
-        next_question()
+                tk.Button(quiz_win, text="Next →", command=lambda: [current_q.__setitem__(0, current_q[0]+1), show_question()],
+                          width=12).pack(pady=10)
+
+            tk.Button(quiz_win, text="Submit", command=check_answer, width=12).pack(pady=8)
+
+        show_question()
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = PhysSciApp(root)
-    root.mainloop()
+    try:
+        root = tk.Tk()
+        app = PhysSciHelper(root)
+        root.mainloop()
+    except Exception as e:
+        print("Error starting app:", e)
+        input("Press Enter to close...")
