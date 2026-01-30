@@ -1,270 +1,176 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jan 29 11:44:37 2026
+Created on Fri Jan 30 10:25:54 2026
 
 @author: 22001691
 """
 
-# app.py
-# Physical Sciences Helper – CAPS Grades 10–12
-# Run locally:   streamlit run app.py
-# Deploy:        Push to GitHub → connect at https://streamlit.io/cloud
+# Physical Sciences CAPS Study App (Grades 10-12) - Python Console Version
+# For high school learners in South Africa
 
-import streamlit as st
-import random
+def clear_screen():
+    print("\n" * 50)  # Simple way to "clear" console
 
-# ────────────────────────────────────────────────
-# Topics data
-# ────────────────────────────────────────────────
+def print_header(title):
+    print("=" * 60)
+    print(f" {title.upper()} ".center(60, "="))
+    print("=" * 60)
+    print()
 
-topics = {
-    "Motion in One Dimension": {
-        "grade": 10,
-        "explanation": """Motion along a straight line.
+def main_menu():
+    while True:
+        clear_screen()
+        print_header("PHYSICAL SCIENCES STUDY APP - CAPS GRADES 10-12")
+        print("Choose your grade:")
+        print("1. Grade 10")
+        print("2. Grade 11")
+        print("3. Grade 12")
+        print("0. Exit")
+        choice = input("\nEnter number: ").strip()
+        
+        if choice == "1":
+            grade_10_menu()
+        elif choice == "2":
+            grade_11_menu()
+        elif choice == "3":
+            grade_12_menu()
+        elif choice == "0":
+            print("\nThank you for studying! Keep working hard! 🚀")
+            break
+        else:
+            print("Invalid choice. Try again.")
 
-Key quantities:
-• Position, displacement (Δx – vector), distance (scalar)
-• Velocity (vector), speed (scalar)
-• Acceleration (vector)
+# ───────────────────────────────────────────────
+# GRADE 10 MENU & TOPICS
+# ───────────────────────────────────────────────
 
-Important equations:
-v = u + at  
-Δx = ut + ½at²  
-v² = u² + 2aΔx  
+def grade_10_menu():
+    while True:
+        clear_screen()
+        print_header("GRADE 10 TOPICS")
+        print("1. Mechanics")
+        print("2. Waves, Sound & Light")
+        print("3. Electricity & Magnetism")
+        print("4. Matter & Materials")
+        print("5. Chemical Systems (Hydrosphere)")
+        print("6. Chemical Change")
+        print("0. Back to main menu")
+        choice = input("\nEnter number: ").strip()
+        
+        if choice == "1": mechanics_g10()
+        elif choice == "2": waves_sound_light_g10()
+        elif choice == "3": electricity_magnetism_g10()
+        elif choice == "4": matter_materials_g10()
+        elif choice == "5": chemical_systems_g10()
+        elif choice == "6": chemical_change_g10()
+        elif choice == "0": break
+        else: print("Invalid choice.")
 
-Average velocity = Δx / Δt
+def mechanics_g10():
+    while True:
+        clear_screen()
+        print_header("GRADE 10 - MECHANICS")
+        print("1. Vectors & Scalars + Motion in 1D")
+        print("2. Energy & Conservation")
+        print("0. Back")
+        sub = input("\nChoose: ")
+        if sub == "1":
+            show_content("Vectors & Scalars + Motion",
+                         "Key Highlight: Scalars have magnitude only (e.g. mass, speed). Vectors have magnitude AND direction (e.g. velocity, force). Use kinematic equations: v = u + at, s = ut + ½at², v² = u² + 2as",
+                         "Notes: Position, displacement, distance, average/instantaneous speed & velocity, acceleration. Graphs: s-t, v-t.",
+                         ["Quiz: Which is a vector? A) Speed B) Distance C) Velocity", "C"],
+                         ["Homework: Plot position-time graph for object moving at constant velocity.",
+                          "Classwork: Solve 5 problems using kinematic equations."])
+        elif sub == "2":
+            show_content("Energy",
+                         "Key Highlight: Mechanical energy (KE + PE) is conserved when no non-conservative forces act. KE = ½mv², PE = mgh.",
+                         "Notes: Work-energy theorem, power = work/time.",
+                         ["Quiz: Formula for kinetic energy? A) mgh B) ½mv² C) Fd", "B"],
+                         ["Homework: Calculate KE & PE for a 2 kg ball dropped from 10 m.",
+                          "Classwork: Show conservation of energy in free fall."])
+        elif sub == "0": break
 
-Graphs:
-• slope of position–time graph → velocity
-• slope of velocity–time graph → acceleration
-• area under velocity–time graph → displacement
-""",
-        "quiz": [
-            {"q": "Displacement is a __________ quantity.", 
-             "options": ["scalar", "vector", "both", "neither"], "ans": 1},
-            {"q": "If an object moves 10 m east then 6 m west, displacement is:", 
-             "options": ["16 m east", "4 m east", "4 m west", "16 m west"], "ans": 1},
-            {"q": "The slope of a position-time graph gives:", 
-             "options": ["acceleration", "velocity", "displacement", "time"], "ans": 1},
-            {"q": "Constant negative acceleration means velocity is:", 
-             "options": ["increasing", "decreasing", "constant", "zero"], "ans": 1}
-        ]
-    },
+def waves_sound_light_g10():
+    show_content("Waves, Sound & Light (Grade 10)",
+                 "Key Highlight: v = fλ (wave speed = frequency × wavelength). Sound is longitudinal; light is electromagnetic.",
+                 "Notes: Transverse vs longitudinal waves, superposition, pitch (frequency), loudness (amplitude), EM spectrum, photon energy E = hf.",
+                 ["Quiz: Unit of frequency? A) m/s B) Hz C) m", "B"],
+                 ["Homework: Calculate wavelength if f=50 Hz and v=340 m/s.",
+                  "Classwork: Draw EM spectrum and label uses."])
 
-    "Waves and Pulses": {
-        "grade": 10,
-        "explanation": """Pulses and waves transfer energy without transferring matter.
+def electricity_magnetism_g10():
+    show_content("Electricity & Magnetism (Grade 10)",
+                 "Key Highlight: Ohm's Law: V = IR. Like charges repel, unlike attract.",
+                 "Notes: Magnetic field lines (N to S), series/parallel resistors, emf vs pd.",
+                 ["Quiz: Ohm's Law formula? A) V=IR B) P=VI C) E=mc²", "A"],
+                 ["Homework: Calculate current in 12 V circuit with 4 Ω resistor.",
+                  "Classwork: Draw circuit with 2 resistors in parallel."])
 
-• Pulse → single disturbance
-• Transverse pulse → particles move perpendicular to direction of pulse
-• Amplitude → maximum displacement from rest position
-• Superposition → displacements add when waves/pulses meet
-  - Constructive: larger amplitude
-  - Destructive: smaller / zero amplitude
-• Continuous transverse wave: crests, troughs, wavelength (λ), frequency (f), period (T = 1/f), speed v = fλ
+def matter_materials_g10():
+    show_content("Matter & Materials (Grade 10)",
+                 "Key Highlight: Kinetic Molecular Theory explains states of matter. Atoms have protons, neutrons, electrons.",
+                 "Notes: Periodic table trends, covalent/ionic/metallic bonding, isotopes.",
+                 ["Quiz: Ionic bonding involves? A) Sharing electrons B) Transfer of electrons C) Delocalised electrons", "B"],
+                 ["Homework: Draw electron configuration for Na and Cl.",
+                  "Classwork: Classify 10 substances as metal/non-metal/compound."])
 
-Reflection:
-• Fixed end → inverted
-• Free end → not inverted
-""",
-        "quiz": [
-            {"q": "A pulse is best described as:", 
-             "options": ["continuous wave", "single disturbance", "electromagnetic only", "longitudinal wave"], "ans": 1},
-            {"q": "In a transverse pulse on a string, particles move:", 
-             "options": ["parallel to pulse", "perpendicular to pulse", "circular", "stationary"], "ans": 1},
-            {"q": "Two identical pulses meeting head-on and overlapping perfectly show:", 
-             "options": ["destructive interference", "constructive interference", "reflection", "refraction"], "ans": 1},
-            {"q": "The principle allowing pulses to pass through each other unchanged is:", 
-             "options": ["reflection", "superposition", "diffraction", "polarisation"], "ans": 1}
-        ]
-    },
+def chemical_systems_g10():
+    show_content("Chemical Systems - Hydrosphere",
+                 "Key Highlight: Water is polar → unique properties (high boiling point, solvent).",
+                 "Notes: Water cycle, desalination, pollution effects.",
+                 ["Quiz: Water is a good solvent because? A) Non-polar B) Polar C) Gas", "B"],
+                 ["Homework: Draw labelled water cycle diagram.",
+                  "Classwork: Discuss advantages/disadvantages of desalination."])
 
-    "Newton's Laws of Motion": {
-        "grade": 11,
-        "explanation": """Newton’s Three Laws:
+def chemical_change_g10():
+    show_content("Chemical Change (Grade 10)",
+                 "Key Highlight: Chemical change forms new substances (e.g. rusting, burning). Physical change does not.",
+                 "Notes: Conservation of mass, balanced equations, separation techniques.",
+                 ["Quiz: Burning paper is? A) Physical B) Chemical C) Neither", "B"],
+                 ["Homework: Balance 5 simple equations (e.g. Mg + O₂ → MgO).",
+                  "Classwork: List 5 examples each of physical & chemical changes."])
 
-1. Law of Inertia: An object remains at rest or in uniform motion unless acted on by a net external force.
+# ───────────────────────────────────────────────
+# GRADE 11 & 12 (similar pattern - abbreviated for brevity)
+# ───────────────────────────────────────────────
 
-2. F_net = m a  
-   (resultant force causes acceleration proportional to mass)
+def grade_11_menu():
+    print_header("GRADE 11 TOPICS (select to view)")
+    print("Main areas: Vectors in 2D, Newton's Laws, Geometrical Optics, Electrostatics, Electromagnetism, Molecular Structure, Ideal Gases, Lithosphere")
+    input("\nPress Enter to return...")
+    # You can add full functions like above for each topic
 
-3. Action–reaction: For every action there is an equal and opposite reaction (on different objects).
+def grade_12_menu():
+    print_header("GRADE 12 TOPICS (select to view)")
+    print("Main areas: Momentum & Impulse, Vertical Projectiles, Work-Energy-Power, Doppler Effect, Electric Circuits (advanced), Photoelectric Effect, Organic Chemistry, Chemical Industry")
+    input("\nPress Enter to return...")
+    # Expand similarly
 
-Key skills:
-• Draw free-body diagrams
-• Identify: weight (mg), normal force, friction, tension, applied force
-""",
-        "quiz": [
-            {"q": "Newton’s First Law is also known as the law of", 
-             "options": ["acceleration", "inertia", "action-reaction", "gravity"], "ans": 1},
-            {"q": "If net force = 0, then acceleration is", 
-             "options": ["increasing", "zero", "negative", "maximum"], "ans": 1},
-            {"q": "The reaction force to the Earth pulling you down is:", 
-             "options": ["your weight", "you pulling Earth up", "normal force", "friction"], "ans": 1}
-        ]
-    },
+# ───────────────────────────────────────────────
+# HELPER FUNCTION TO DISPLAY CONTENT
+# ───────────────────────────────────────────────
 
-    "Faraday's Law": {
-        "grade": 11,
-        "explanation": """Electromagnetic induction:
+def show_content(title, highlight, notes, quiz, tasks):
+    clear_screen()
+    print_header(title)
+    print("★★★ KEY HIGHLIGHT ★★★")
+    print(highlight)
+    print("\nNOTES SUMMARY:")
+    print(notes)
+    print("\nQUIZ:")
+    for q in quiz[:-1]:
+        print(q)
+    answer = input("\nYour answer (A/B/C): ").strip().upper()
+    correct = quiz[-1]
+    if answer == correct:
+        print("\nCorrect! Well done! 🎉")
+    else:
+        print(f"\nSorry, the correct answer is {correct}.")
+    print("\nHOMEWORK / CLASSWORK IDEAS:")
+    for t in tasks:
+        print(f"- {t}")
+    input("\nPress Enter to continue...")
 
-Faraday’s Law:  
-Induced emf (ε) = – (rate of change of magnetic flux)  
-ε = – ΔΦ / Δt
-
-Magnetic flux Φ = B ⋅ A ⋅ cosθ  
-(B = magnetic field strength, A = area, θ = angle between B and normal to area)
-
-Lenz’s Law: Induced current opposes the change that caused it.
-
-Applications:  
-• AC generators  
-• Transformers  
-• Induction hobs / metal detectors
-""",
-        "quiz": [
-            {"q": "Faraday’s Law links induced emf to change in", 
-             "options": ["current", "magnetic flux", "resistance", "voltage"], "ans": 1},
-            {"q": "The negative sign in Faraday’s equation comes from", 
-             "options": ["Ohm’s law", "Lenz’s law", "Newton’s law", "Coulomb’s law"], "ans": 1},
-            {"q": "Pushing a magnet into a coil faster produces", 
-             "options": ["smaller emf", "larger emf", "zero emf", "constant emf"], "ans": 1},
-            {"q": "Maximum magnetic flux occurs when angle between B and area normal is", 
-             "options": ["90°", "0°", "180°", "45°"], "ans": 1}
-        ]
-    },
-
-    "Projectile Motion": {
-        "grade": 12,
-        "explanation": """Motion under gravity only (ignore air resistance).
-
-Horizontal component: constant velocity  
-vx = vi cos θ  
-Range contribution: Δx = vx ⋅ t
-
-Vertical component: constant acceleration g = 9.8 m/s² downward  
-vy = vi sin θ – g t  
-Δy = (vi sin θ) t – ½ g t²  
-vy² = (vi sin θ)² – 2 g Δy
-
-Key points:
-• Time to max height = (vi sin θ) / g
-• Total time of flight (level ground) = 2 (vi sin θ) / g
-• Trajectory = parabola
-""",
-        "quiz": [
-            {"q": "Horizontal acceleration in projectile motion is", 
-             "options": ["9.8 m/s² down", "zero", "9.8 m/s² up", "depends on angle"], "ans": 1},
-            {"q": "Time to reach maximum height is", 
-             "options": ["(vi sin θ)/g", "(vi cos θ)/g", "2(vi sin θ)/g", "vi/g"], "ans": 0},
-            {"q": "At maximum height, vertical component of velocity is", 
-             "options": ["maximum", "zero", "negative", "vi sin θ"], "ans": 1},
-            {"q": "The path followed by a projectile is", 
-             "options": ["straight line", "parabola", "circle", "hyperbola"], "ans": 1}
-        ]
-    },
-
-    "Doppler Effect": {
-        "grade": 12,
-        "explanation": """Change in observed frequency due to relative motion between source and observer.
-
-Sound formula (general):  
-f' = f  ×  (v ± vo) / (v ± vs)  
-v = speed of sound (~340 m/s)  
-+vo / –vs when approaching, –vo / +vs when receding
-
-Effects:
-• Source approaching listener → higher pitch
-• Listener approaching source → higher pitch
-
-Light:  
-• Red shift → source moving away (galaxies → expanding universe)  
-• Blue shift → source approaching
-""",
-        "quiz": [
-            {"q": "When a sound source moves toward a stationary observer, observed frequency", 
-             "options": ["decreases", "increases", "stays the same", "becomes zero"], "ans": 1},
-            {"q": "The general Doppler formula for sound is", 
-             "options": ["f' = f (v / vs)", "f' = f (v ± vo)/(v ± vs)", "f' = f v", "f' = f / v"], "ans": 1},
-            {"q": "Red shift of light from distant galaxies indicates the universe is", 
-             "options": ["contracting", "expanding", "stationary", "rotating"], "ans": 1},
-            {"q": "If observer moves away from a stationary source, frequency", 
-             "options": ["increases", "decreases", "doubles", "halves"], "ans": 1}
-        ]
-    },
-}
-
-# ────────────────────────────────────────────────
-# Streamlit App
-# ────────────────────────────────────────────────
-
-st.title("Physical Sciences Helper – CAPS Grades 10–12")
-st.markdown("Select a grade and topic to study or practise.")
-
-grade_filter = st.selectbox("Grade", ["All", 10, 11, 12])
-
-available = [
-    name for name, data in topics.items()
-    if grade_filter == "All" or data["grade"] == int(grade_filter)
-]
-
-if not available:
-    st.warning("No topics available for the selected grade yet.")
-else:
-    topic = st.selectbox("Topic", available)
-
-    if topic:
-        data = topics[topic]
-
-        tab_expl, tab_quiz = st.tabs(["📖 Explanation", "🧪 Quiz"])
-
-        with tab_expl:
-            st.markdown(data["explanation"])
-
-        with tab_quiz:
-            questions = data.get("quiz", [])
-            if not questions:
-                st.info("No quiz questions available for this topic yet.")
-            else:
-                random.shuffle(questions)
-                score = 0
-                total = len(questions)
-
-                for i, q in enumerate(questions, 1):
-                    st.subheader(f"Question {i} of {total}")
-                    st.write(q["q"])
-
-                    choice = st.radio(
-                        "Choose one:",
-                        q["options"],
-                        index=None,
-                        key=f"q_{topic}_{i}"
-                    )
-
-                    if choice is not None:
-                        correct = q["options"][q["ans"]]
-                        if choice == correct:
-                            score += 1
-                            st.success("Correct ✓")
-                        else:
-                            st.error(f"Wrong → correct answer: **{correct}**")
-
-                if st.button("Finish Quiz – Show Score"):
-                    percent = (score / total) * 100 if total > 0 else 0
-                    st.markdown(f"**Score: {score} / {total}**  ({percent:.1f}%)")
-
-                    if percent >= 80:
-                        st.balloons()
-                        st.success("Excellent! Well done 🔥")
-                    elif percent >= 50:
-                        st.info("Good effort – review and try again.")
-                    else:
-                        st.warning("Keep practising – you’ll get there!")
-
-# Footer
-st.markdown("---")
-st.caption(
-    "Built for CAPS Physical Sciences learners • "
-    "Add more topics/questions in the code as needed • "
-    "Questions shuffled each time for better practice"
-)
+# Start the app
+if __name__ == "__main__":
+    main_menu()
