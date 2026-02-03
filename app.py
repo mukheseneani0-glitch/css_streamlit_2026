@@ -4,7 +4,7 @@ Created on Tue Feb  3 14:22:28 2026
 
 @author: 22001691
 """
-
+# app.py
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -12,13 +12,10 @@ import plotly.express as px
 from scipy.stats import pearsonr
 
 st.set_page_config(page_title="Grade 10 Practical Tools Impact", layout="wide")
-
 st.title("Grade 10 – Practical Tools Impact Dashboard")
 st.markdown("Compare how different practical approaches affect performance and understanding.")
 
-# ────────────────────────────────────────────────
-# Session state for persistent data
-# ────────────────────────────────────────────────
+# Persistent data
 if "df" not in st.session_state:
     st.session_state.df = pd.DataFrame([
         {"Group": "Traditional (no practical)", "Students": 30, "Pre (%)": 55.0, "Post (%)": 60.0, "Understanding (1-10)": 5.2, "Practical Hours": 0.0},
@@ -29,9 +26,7 @@ if "df" not in st.session_state:
 
 df = st.session_state.df.copy()
 
-# ────────────────────────────────────────────────
-# Sidebar – Add / Edit row
-# ────────────────────────────────────────────────
+# Sidebar – Add/Edit
 with st.sidebar:
     st.header("Add or Update Group")
     group = st.text_input("Group / Tool name", "New Group")
@@ -42,26 +37,22 @@ with st.sidebar:
     hours = st.number_input("Practical hours", 0.0, 100.0, 10.0, 1.0)
 
     if st.button("Add / Update", type="primary"):
-        # Update if group exists, else append
         mask = df["Group"] == group
         if mask.any():
-            df.loc[mask, ["Students", "Pre (%)", "Post (%)", "Understanding (1-10)", "Practical Hours"]] = \
-                [students, pre, post, understand, hours]
+            df.loc[mask, ["Students", "Pre (%)", "Post (%)", "Understanding (1-10)", "Practical Hours"]] = [students, pre, post, understand, hours]
         else:
-            new_row = pd.DataFrame({
-                "Group": [group], "Students": [students], "Pre (%)": [pre],
-                "Post (%)": [post], "Understanding (1-10)": [understand], "Practical Hours": [hours]
-            })
+            new_row = pd.DataFrame([{
+                "Group": group, "Students": students, "Pre (%)": pre,
+                "Post (%)": post, "Understanding (1-10)": understand, "Practical Hours": hours
+            }])
             df = pd.concat([df, new_row], ignore_index=True)
         st.session_state.df = df
         st.success(f"Group '{group}' added/updated!")
 
-# ────────────────────────────────────────────────
-# Main area – Table + Stats + Charts
-# ────────────────────────────────────────────────
+# Main area
 st.subheader("Your Data")
 edited_df = st.data_editor(df, num_rows="dynamic", use_container_width=True)
-st.session_state.df = edited_df  # save changes from editor
+st.session_state.df = edited_df
 
 if len(edited_df) >= 2:
     improve = edited_df["Post (%)"] - edited_df["Pre (%)"]
@@ -77,7 +68,7 @@ if len(edited_df) >= 2:
 
     with tab1:
         fig1 = px.bar(edited_df, x="Group", y="Post (%)", title="Post-test Scores",
-                      color="Post (%)", range_y=[0,100])
+                      color="Post (%)", range_y=[0, 100])
         st.plotly_chart(fig1, use_container_width=True)
 
     with tab2:
