@@ -7,7 +7,6 @@ Created on Tue Feb  3 14:22:28 2026
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-
 st.set_page_config(page_title="Grade 10 Practical Tools Impact", layout="wide")
 st.title("Grade 10 – Practical Tools Impact Dashboard")
 st.markdown("Compare how different practical approaches affect performance and understanding.")
